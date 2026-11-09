@@ -1,4 +1,4 @@
-# UML completo con tabla hash
+# UML completo
 
 `````mermaid
 classDiagram
@@ -83,7 +83,6 @@ namespace Modelo {
 
     class Inventario:::modelo {
         -ArbolInventario arbol
-        -TablaHashInventario indicePorCodigo
         +registrarInsumo(Insumo insumo) void
         +buscarInsumo(String codigo) Insumo
         +descontarStock(String codigo, int cantidad) boolean
@@ -225,15 +224,6 @@ namespace EstructurasDatos {
         -NodoArbol~T~ izq
         -NodoArbol~T~ der
     }
-
-    class TablaHashInventario:::estructuras {
-        -Insumo[] tabla
-        -int cantidad
-        +insertar(Insumo insumo) boolean
-        +buscar(String codigo) Insumo
-        -calcularIndice(String codigo) int
-        -redimensionar() void
-    }
 }
 
 %% 3. Controladores MVC
@@ -360,7 +350,7 @@ class Main:::utilidades {
 }
 `````
 
-**Parte 2: relaciones, colores y cierre (con hash)**
+**Parte 2: relaciones, colores y cierre**
 
 `````text
 %% Herencia del modelo
@@ -386,8 +376,7 @@ Reporte ..> Inventario : consulta
 
 %% Estructuras y almacenamiento
 Pedido *-- ListaEnlazada : guarda detalles
-Inventario *-- ArbolInventario : ordena insumos
-Inventario *-- TablaHashInventario : busca por código
+Inventario *-- ArbolInventario : guarda insumos por código
 ListaEnlazada *-- NodoLista : contiene nodos
 ColaPedidos *-- NodoCola : contiene nodos
 ColaPedidos ..> Pedido : ordena por prioridad
@@ -397,7 +386,6 @@ ArbolProductos *-- NodoArbol : contiene nodos
 ArbolProductos ..> Producto : indexa por código
 ArbolInventario *-- NodoArbol : contiene nodos
 ArbolInventario ..> Insumo : ordena por código
-TablaHashInventario ..> Insumo : indexa por código
 
 %% Inicio y navegación
 Main ..> LoginView : inicia Swing
@@ -446,14 +434,12 @@ style NodoArbol fill:#EDF7EB,stroke:#4D754A,color:#263D25
 ````
 ````
 
-**Diferencias entre las dos versiones**
+**Qué cambié respecto al de tu compañero**
+- Quité `TablaHashInventario`, la línea `indicePorCodigo` de `Inventario`, las dos relaciones con la tabla y el comentario que la mencionaba.
+- Ajusté el texto de la relación `Inventario *-- ArbolInventario` para que diga "guarda insumos por código".
+- Todo lo demás quedó igual.
 
-| | Sin hash | Con hash |
-|---|---|---|
-| Clases de estructuras | 9 | 10 (suma `TablaHashInventario`) |
-| `Inventario` | solo `ArbolInventario` | `ArbolInventario` + `TablaHashInventario` |
-| Cumple el sílabo | Sí | No, la tabla hash no está en el temario |
-
-Para entregar al docente, usa la **versión sin hash**. La de con hash solo sirve de respaldo o para comparar. Conviene que tu compañero y tú acuerden cuál será la oficial, para que el código del proyecto coincida con el diagrama.
-
-Cuando pegues cada archivo, revisa que tenga unas **390 líneas**. Si tiene menos, el pegado se cortó.
+**Al terminar**
+1. Revisa que el archivo tenga unas **390 líneas**. Si tiene menos, el pegado se cortó y hay que repetirlo.
+2. Abre la pestaña **Preview**.
+3. Si sale un error de sintaxis, quita las líneas `namespace ... {` con sus llaves de cierre `}` y los `:::modelo`, `:::vistas`, etc. Se pierden los colores y los recuadros por sección, pero el diagrama funciona igual. Si te pasa, mándame la captura del error y te devuelvo la versión simplificada lista para pegar.
